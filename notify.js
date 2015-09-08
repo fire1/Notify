@@ -8,89 +8,142 @@
  *  SOFTWARE.
  *
  *
- * Created by  Angel Zaprianov <me@fire1.eu> on 9/8/15.
+ * @author Angel Zaprianov <me@fire1.eu> on 9/8/15.
  */
-
-
 (function ($) {
+    $.fn.notify = function (options) {
 
-    var opt = $.extend({
-        // These are the defaults.
-        url: 'demo/example.josn',
-        timer: 3000,
-        query: ''
-    }, options);
-
-    var txtTitle, txtBody, srcIcon, showedContainer = [];
+        var opt = $.extend({
+            // These are the defaults.
+            url: '',
+            timer: 1000,
+            query: ''
+        }, options);
 
 
-    // Generate message
-    var messageShow = function () {
-        return new Notification(txtTitle, {
-            body: txtBody,
-            icon: srcIcon
-        })
-    };
+        /**
+         * Set local storage item
+         * @param key
+         * @param obj
+         */
+        var setStorage = function (key, obj) {
+            return localStorage.setItem(key, JSON.stringify(obj))
+        };
+        /**
+         * Get local storage
+         * @param key
+         */
+        var getStorage = function (key) {
+            return JSON.parse(localStorage.getItem(key))
+        };
 
-    var triggerNotify = function () {
-        // Let's check if the browser supports notifications
-        if (!("Notification" in window)) {
-            // backup option
-            alert(txtBody);
-            console.error('Browser do not support notification!');
+
+        var timeContainer = getStorage('notifyTime');
+        if (!timeContainer) {
+            timeContainer = [];
         }
 
-        // Let's check whether notification permissions have already been granted
-        else if (Notification.permission === "granted") {
-            // If it's okay let's create a notification
-            messageShow();
-        }
-
-        // Otherwise, we need to ask the user for permission
-        else if (Notification.permission !== 'denied') {
-            Notification.requestPermission(function (permission) {
-                // If the user accepts, let's create a notification
-                if (permission === "granted") {
-                    messageShow();
-                }
-            });
-        }
-
-        // At last, if the user has denied notifications, and you
-        // want to be respectful there is no need to bother them any more.
-    };
-
-    // Ajax main settings
-    var actionAjax = function () {
-        var request = $.ajax({
-            url: opt.url,
-            data: opt.query,
-            dataType: 'json'
-        });
-
-        // Trigger notify
-        request.done(function (msg) {
-            if (!msg.title || !msg.body || !msg.token) {
-                console.error('Given file is not supported! Please set your json as {title: "", body:"", token:"" } ');
+        var actionNotify = function (msg) {
+            if (!msg.name || !msg.body) {
+                console.error(''
+                    + 'Given file is not supported! Please set your json as {title: "", body:"", token:"" }'
+                    + '');
+                return;
             }
+
+            console.log(Math.floor(Date.now() / 1000));
+
+
+            var timeShow = parseInt(msg.time);
+            if (Math.floor(Date.now() / 1000) < timeShow) {
+                return;
+            }
+
 
             // Check showed message for users not refreshed page
-            if (showedContainer.indexOf(msg.token) == -1) {
-                showedContainer.push(msg.token);
-                triggerNotify();
+            if (timeContainer.indexOf(timeShow) == -1) {
+                timeContainer.push(timeShow);
+                // Trigger notifiaction
+                trigger(msg.name, msg.body, !msg.icon ? opt.icon : msg.icon);
+                setStorage('notifyTime', timeContainer);
+            }
+        }
+
+        /**
+         * Create message
+         * @param txtTitle
+         * @param txtBody
+         * @param srcIcon
+         * @returns {*}
+         */
+        var show = function (txtTitle, txtBody, srcIcon) {
+            return new Notification(txtTitle, {
+                body: txtBody,
+                icon: srcIcon
+            })
+        };
+
+        /**
+         * Trigger notification
+         * @param txtTitle
+         * @param txtBody
+         * @param srcIcon
+         */
+        var trigger = function (txtTitle, txtBody, srcIcon) {
+            // Let's check if the browser supports notifications
+            if (!("Notification" in window)) {
+                // backup option
+                alert(txtBody);
+                console.error('Browser do not support notification!');
             }
 
-        });
+            // Let's check whether notification permissions have already been granted
+            else if (Notification.permission === "granted") {
+                // If it's okay let's create a notification
+                show(txtTitle, txtBody, srcIcon);
+            }
 
-        // Show page not found error
-        request.fail(function (jqXHR, textStatus) {
-            console.error('Cannot find given URL page ')
-        });
-        setTimeout(actionAjax, opt.timer);
-    };
+            // Otherwise, we need to ask the user for permission
+            else if (Notification.permission !== 'denied') {
+                Notification.requestPermission(function (permission) {
+                    // If the user accepts, let's create a notification
+                    if (permission === "granted") {
+                        show(txtTitle, txtBody, srcIcon);
+                    }
+                });
+            }
+
+            // At last, if the user has denied notifications, and you
+            // want to be respectful there is no need to bother them any more.
+        };
 
 
-    $.fn.notify = function () {
+        /**
+         * Runs Ajax action
+         */
+        var actionAjax = function () {
+            var request = $.ajax({
+                url: opt.url,
+                data: opt.query,
+                dataType: 'json'
+            });
+            var now = new Date();
+            // Trigger notify
+            request.done(function (arrResponce) {
+
+                $.each(arrResponce, function (index, messages) {
+                    //console.log(messages);
+                    actionNotify(messages);
+                });
+            });
+
+            // Show page not found error
+            request.fail(function (jqXHR, textStatus) {
+                console.error('Cannot find given URL page ')
+            });
+            setTimeout(actionAjax, opt.timer);
+        };
+
         if (opt.url) {
             actionAjax();
         } else {
