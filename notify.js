@@ -16,8 +16,9 @@
 
     var opt = $.extend({
         // These are the defaults.
-        url: 'example.josn',
-        timer: 3000
+        url: 'demo/example.josn',
+        timer: 3000,
+        query: ''
     }, options);
 
     var txtTitle, txtBody, srcIcon, showedContainer = [];
