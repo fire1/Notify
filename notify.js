@@ -17,7 +17,9 @@
             // These are the defaults.
             url: '',
             timer: 1000,
-            query: ''
+            query: '',
+            icon: 'notify.png',
+            data: []
         }, options);
 
 
@@ -43,6 +45,10 @@
             timeContainer = [];
         }
 
+        /**
+         * Runs notifications
+         * @param msg
+         */
         var actionNotify = function (msg) {
             if (!msg.name || !msg.body) {
                 console.error(''
@@ -67,7 +73,7 @@
                 trigger(msg.name, msg.body, !msg.icon ? opt.icon : msg.icon);
                 setStorage('notifyTime', timeContainer);
             }
-        }
+        };
 
         /**
          * Create message
@@ -117,6 +123,15 @@
             // want to be respectful there is no need to bother them any more.
         };
 
+        /**
+         * Runs notify from jquery function object
+         */
+        var actionObject = function () {
+            $.each(opt.data, function (index, messages) {
+                actionNotify(messages);
+            });
+            setTimeout(actionObject, opt.timer);
+        };
 
         /**
          * Runs Ajax action
@@ -146,6 +161,8 @@
 
         if (opt.url) {
             actionAjax();
+        } else if (opt.data.length > 0) {
+            actionObject();
         } else {
             console.error('Ajax URL is not set!');
         }
