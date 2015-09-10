@@ -7,8 +7,10 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  *
- *
- * @author Angel Zaprianov <me@fire1.eu> on 9/8/15.
+ * Date: 09/08/2015
+ * @version 1.00
+ * @link https://github.com/fire1/notify
+ * @author Angel Zaprianov <me@fire1.eu>
  */
 (function ($) {
     $.fn.notify = function (options) {
