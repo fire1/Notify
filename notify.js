@@ -7,17 +7,19 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  *
- *
- * @author Angel Zaprianov <me@fire1.eu> on 9/8/15.
+ * Date: 09/08/2015
+ * @version 1.01
+ * @link https://github.com/fire1/Notify
+ * @author Angel Zaprianov <me@fire1.eu>
  */
 (function ($) {
-    $.fn.notify = function (options) {
+    $.notify = function (options) {
 
         var opt = $.extend({
             // These are the defaults.
             url: '',
             timer: 1000,
-            query: '',
+            query: {},
             icon: 'notify.png',
             data: []
         }, options);
@@ -40,6 +42,9 @@
         };
 
 
+        /**
+         * Checks for empty container
+         */
         var timeContainer = getStorage('notifyTime');
         if (!timeContainer) {
             timeContainer = [];
@@ -52,14 +57,14 @@
         var actionNotify = function (msg) {
             if (!msg.name || !msg.body) {
                 console.error(''
-                    + 'Given file is not supported! Please set your json as {title: "", body:"", token:"" }'
+                    + 'Given file is not supported! Please set your json as {name: "", body:"", time:"" }'
                     + '');
                 return;
             }
 
-            console.log(Math.floor(Date.now() / 1000));
+            //console.log(Math.floor(Date.now() / 1000));
 
-
+            // Compare time between local and given data
             var timeShow = parseInt(msg.time);
             if (Math.floor(Date.now() / 1000) < timeShow) {
                 return;
@@ -142,7 +147,7 @@
                 data: opt.query,
                 dataType: 'json'
             });
-            var now = new Date();
+
             // Trigger notify
             request.done(function (arrResponce) {
 
@@ -154,11 +159,13 @@
 
             // Show page not found error
             request.fail(function (jqXHR, textStatus) {
-                console.error('Cannot find given URL page ')
+                console.error('Cannot find given URL page: ' + opt.url)
             });
             setTimeout(actionAjax, opt.timer);
         };
 
+        //
+        // Execution controller
         if (opt.url) {
             actionAjax();
         } else if (opt.data.length > 0) {
@@ -166,6 +173,8 @@
         } else {
             console.error('Ajax URL is not set!');
         }
+
+
     };
 
 }(jQuery));
