@@ -1,4 +1,4 @@
-/**
+/*!
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -9,8 +9,8 @@
  *
  * Date: 09/08/2015
  * @version 1.01
- * @link https://github.com/fire1/Notify
  * @author Angel Zaprianov <me@fire1.eu>
+ * Homepage: https://github.com/fire1/Notify
  */
 (function ($) {
     $.notify = function (options) {
@@ -24,7 +24,6 @@
             data: []
         }, options);
 
-
         /**
          * Set local storage item
          * @param key
@@ -33,6 +32,7 @@
         var setStorage = function (key, obj) {
             return localStorage.setItem(key, JSON.stringify(obj))
         };
+
         /**
          * Get local storage
          * @param key
@@ -40,7 +40,6 @@
         var getStorage = function (key) {
             return JSON.parse(localStorage.getItem(key))
         };
-
 
         /**
          * Checks for empty container
@@ -164,7 +163,6 @@
             setTimeout(actionAjax, opt.timer);
         };
 
-        //
         // Execution controller
         if (opt.url) {
             actionAjax();
