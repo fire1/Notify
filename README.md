@@ -4,6 +4,22 @@
 + Supports Ajax/Json managing.
 + Simple and easy to use.
 
+### Defaults options
+    <script>
+        $(function () {
+            // These are the defaults.
+            $().notify({
+                url: '',                // URI Path to file [NOTE: It is good to use static file *.json]
+                timer: 3000,            // Timer [NOTE: Response Code 304 from server is required for lower interval loops]
+                query: {},              // Object for URI method GET Query params to file
+                icon: 'notify.png',     // Default icon for messages
+                dataIndex: '',          // If is set dataIndex then accepts format will be something like: ( user_id_4: { name: ..., body: ... ...  } )
+                dataGlobal: 'global',   // If "dataIndex" is used then this is the global massage
+                data: [],               // Object contained the information
+                debug: false            // Debug mode
+            });
+        });     
+    </script>
 
 ### Simple Example: 
     <script>
@@ -42,6 +58,8 @@
             });
         });
     </script>
+    
+    
 
 
 

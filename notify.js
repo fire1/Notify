@@ -13,16 +13,33 @@
  * Homepage: https://github.com/fire1/Notify
  */
 (function ($) {
+    //
+    // Notify :)
     $.notify = function (options) {
 
         var opt = $.extend({
             // These are the defaults.
-            url: '',
-            timer: 1000,
-            query: {},
-            icon: 'notify.png',
-            data: []
+            url: '',                // URI Path to file [NOTE: It is good to use static file *.json]
+            timer: 3000,            // Timer [NOTE: Response Code 304 from server is required for lower interval loops]
+            query: {},              // Object for URI method GET Query params to file
+            icon: 'notify.png',     // Default icon for messages
+            dataIndex: '',          // If is set dataIndex then accepts format will be something like: ( user_id_4: { name: ..., body: ... ...  } )
+            dataGlobal: 'global',   // If "dataIndex" is used then this is the global massage
+            data: [],               // Object contained the information
+            debug: false            // Debug mode
         }, options);
+
+
+        /**
+         * Debugging messages function
+         * @param message
+         */
+        var dbg = function (message) {
+            if (opt.debug) {
+                console.log(message);
+            }
+        };
+
 
         /**
          * Set local storage item
@@ -61,7 +78,8 @@
                 return;
             }
 
-            //console.log(Math.floor(Date.now() / 1000));
+            // Debug timing
+            dbg(Math.floor(Date.now() / 1000));
 
             // Compare time between local and given data
             var timeShow = parseInt(msg.time);
@@ -148,10 +166,22 @@
             });
 
             // Trigger notify
-            request.done(function (arrResponce) {
+            request.done(function (arrResponse) {
 
-                $.each(arrResponce, function (index, messages) {
-                    //console.log(messages);
+                // If exist data index for format: ( user_id_4: { ... } )
+                if (opt.dataIndex) {
+
+                    // Global notify
+                    var arrGlobal = arrResponse[opt.dataGlobal];
+
+                    // Only for user
+                    arrResponse = arrResponse[opt.dataIndex];
+                    $.extend(arrResponse, arrGlobal);
+                }
+
+                // Loop private objects
+                $.each(arrResponse, function (index, messages) {
+                    dbg('Logging message into notify', index, messages);
                     actionNotify(messages);
                 });
             });
@@ -165,8 +195,10 @@
 
         // Execution controller
         if (opt.url) {
+            dbg('Using ajax method for notify ...');
             actionAjax();
         } else if (opt.data.length > 0) {
+            dbg('Using input data for notify ... ');
             actionObject();
         } else {
             console.error('Ajax URL is not set!');
