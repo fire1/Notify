@@ -1,6 +1,6 @@
 # Notify 
 
-     Notify is based on  Notifications API is used to configure and display desktop notifications to the user. 
+Notify is based on  Notifications API is used to configure and display desktop notifications to the user. 
 
 + Based on jQuery and HTML5 standard.
 + Supports Ajax/Json managing.
