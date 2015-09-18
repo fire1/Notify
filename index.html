@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery Notify </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+    <link type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+</head>
+<body>
+<div class="container">
+    <section>
+        <div class="container">
+
+            <div class="page-header">
+                <h1>jQuery Notify plugin </h1>
+            </div>
+            <p class="lead"> Wait for 3 notifications to appear on your screen!</p>
+
+            <p>
+                This plugin uses HTML storage to save showed messages
+            </p>
+
+            <br/>
+            This demo page uses this settings:
+            <code>
+                <script>
+                    $(function () {
+                        $().notify({
+                            data: [
+                                {
+                                    //  This message will appear 1 sec. after document is loaded
+                                    "name": "Hello World 1",
+                                    "body": " This is only example message ",
+                                    "icon": "notify.png",
+                                    "time": (Math.floor(Date.now() / 1000) + 1)
+                                },
+                                {
+                                    // This message will appear 5 sec  after document is loaded
+                                    "name": "Hello World 2",
+                                    "body": " This is only example message ",
+                                    "icon": "notify.png",
+                                    "time": (Math.floor(Date.now() / 1000) + 5)
+                                },
+                                {
+                                    // This message will appear 10 sec  after document is loaded
+                                    "name": "Hello World 3",
+                                    "body": " This is only example message ",
+                                    "icon": "notify.png",
+                                    "time": (Math.floor(Date.now() / 1000) + 10)
+                                }
+                            ]
+                        });
+                    });
+                </script>
+            </code>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">Author: <a href="//fire1.eu/" target="_blank">fire1</a>.</p>
+        </div>
+    </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="./notify.min.js" type="text/javascript"></script>
+<script>
+    $(function () {
+        $().notify({
+            data: [
+                {
+                    //  This message will appear 1 sec. after document is loaded
+                    "name": "Hello World 1",
+                    "body": " This is only example message ",
+                    "icon": "notify.png",
+                    "time": (Math.floor(Date.now() / 1000) + 1)
+                },
+                {
+                    // This message will appear 5 sec  after document is loaded
+                    "name": "Hello World 2",
+                    "body": " This is only example message ",
+                    "icon": "notify.png",
+                    "time": (Math.floor(Date.now() / 1000) + 5)
+                },
+                {
+                    // This message will appear 10 sec  after document is loaded
+                    "name": "Hello World 3",
+                    "body": " This is only example message ",
+                    "icon": "notify.png",
+                    "time": (Math.floor(Date.now() / 1000) + 10)
+                }
+            ]
+        });
+    });
+</script>
+</body>
+</html>
